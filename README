@@ -1,0 +1,3 @@
+普通消息生产者：    参考ProducerDemo producer.xml
+全局顺序消息生产者：参考GlobalOrderProducerDemo global-order-producer.xml
+消费者：            参考ConsumerDemo consumer.xml

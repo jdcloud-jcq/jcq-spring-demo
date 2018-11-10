@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- jcq client工厂 -->
+    <bean id="jcqClientFactory" class="com.jcloud.jcq.sdk.JCQClientFactory" factory-method="getInstance" />
+
+    <!-- 用户身份信息 -->
+    <bean id="userCredential" class="com.jcloud.jcq.sdk.auth.UserCredential">
+        <!-- 用户accessKey -->
+        <constructor-arg value="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0" />
+        <!-- 用户secretKey -->
+        <constructor-arg value="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB0" />
+    </bean>
+
+    <!-- 消费者配置 -->
+    <bean id="consumerConfig" class="com.jcloud.jcq.sdk.consumer.ConsumerConfig">
+        <!-- 消费组id -->
+        <property name="consumerGroupId" value="testConsumerGroup" />
+        <!-- 元数据服务器地址 -->
+        <property name="metaServerAddress" value="192.168.166.57:18888" />
+    </bean>
+
+    <!-- 消费者 -->
+    <bean id="consumer" factory-bean="jcqClientFactory" factory-method="createConsumer">
+        <constructor-arg ref="userCredential" />
+        <constructor-arg ref="consumerConfig" />
+    </bean>
+
+    <!-- 消费者bean-->
+    <bean id="jcqConsumer" class="com.jcloud.jcq.spring.demo.consumer.JCQConsumer" init-method="start" destroy-method="shutdown">
+        <!-- 消费者 -->
+        <property name="consumer" ref="consumer" />
+        <!-- 订阅的topic和对应的消息监听器的map -->
+        <property name="topicMessageListenerMap">
+            <map>
+                <entry key="testTopic">
+                    <bean class="com.jcloud.jcq.spring.demo.consumer.DefaultMessageListener" />
+                </entry>
+                <entry key="testTopic1">
+                    <bean class="com.jcloud.jcq.spring.demo.consumer.DefaultMessageListener" />
+                </entry>
+            </map>
+        </property>
+        <!-- 订阅的topic和对应的过滤条件的map -->
+        <property name="topicFilterExpressionMap">
+            <map>
+                <!-- 过滤条件为null -->
+                <entry key="testTopic">
+                    <null/>
+                </entry>
+                <!-- 过滤条件为TAG1,TAG2 -->
+                <entry key="testTopic1">
+                    <bean class="com.jcloud.jcq.common.filter.FilterExpression">
+                        <property name="expressionType" value="TAG"/>
+                        <property name="expression" value="TAG1,TAG2"/>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+</beans>

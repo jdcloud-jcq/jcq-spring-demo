@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- jcq client工厂 -->
+    <bean id="jcqClientFactory" class="com.jcloud.jcq.sdk.JCQClientFactory" factory-method="getInstance" />
+
+    <!-- 用户身份信息 -->
+    <bean id="userCredential" class="com.jcloud.jcq.sdk.auth.UserCredential">
+        <!-- 用户accessKey -->
+        <constructor-arg value="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0" />
+        <!-- 用户secretKey -->
+        <constructor-arg value="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB0" />
+    </bean>
+
+    <!-- 生产者配置 -->
+    <bean id="producerConfig" class="com.jcloud.jcq.sdk.producer.ProducerConfig">
+        <!-- 元数据服务器地址 -->
+        <property name="metaServerAddress" value="192.168.166.57:18888" />
+    </bean>
+
+    <!-- 生产者 -->
+    <bean id="producer" factory-bean="jcqClientFactory" factory-method="createProducer" init-method="start" destroy-method="shutdown">
+        <constructor-arg ref="userCredential" />
+        <constructor-arg ref="producerConfig" />
+    </bean>
+</beans>
