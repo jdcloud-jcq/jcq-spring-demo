@@ -23,7 +23,7 @@
         <!-- 消费组id -->
         <property name="consumerGroupId" value="testConsumerGroup" />
         <!-- 元数据服务器地址 -->
-        <property name="metaServerAddress" value="192.168.166.57:18888" />
+        <property name="metaServerAddress" value="127.0.0.1:18888" />
     </bean>
 
     <!-- 消费者 -->
