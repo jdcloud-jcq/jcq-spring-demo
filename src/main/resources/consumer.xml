@@ -23,7 +23,7 @@
         <!-- 消费组id -->
         <property name="consumerGroupId" value="testConsumerGroup" />
         <!-- 元数据服务器地址 -->
-        <property name="metaServerAddress" value="192.168.166.57:18888" />
+        <property name="metaServerAddress" value="127.0.0.1:18888" />
     </bean>
 
     <!-- 消费者 -->
@@ -54,11 +54,11 @@
                 <entry key="testTopic">
                     <null/>
                 </entry>
-                <!-- 过滤条件为TAG1,TAG2 -->
+                <!-- 过滤条件为TAG1 -->
                 <entry key="testTopic1">
                     <bean class="com.jcloud.jcq.common.filter.FilterExpression">
                         <property name="expressionType" value="TAG"/>
-                        <property name="expression" value="TAG1,TAG2"/>
+                        <property name="expression" value="TAG1"/>
                     </bean>
                 </entry>
             </map>

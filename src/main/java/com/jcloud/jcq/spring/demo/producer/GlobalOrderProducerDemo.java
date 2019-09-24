@@ -1,5 +1,6 @@
 package com.jcloud.jcq.spring.demo.producer;
 
+import com.jcloud.jcq.common.constants.MessageConstants;
 import com.jcloud.jcq.protocol.Message;
 import com.jcloud.jcq.sdk.producer.GlobalOrderProducer;
 import com.jcloud.jcq.sdk.producer.model.SendBatchResult;
@@ -27,13 +28,16 @@ public class GlobalOrderProducerDemo {
         // 从context中获取全局顺序消息生产者bean （对于生命周期由spring管理的对象，比如controller、service等, 要使用globalOrderProducer bean, 直接注入即可)
         GlobalOrderProducer globalOrderProducer = (GlobalOrderProducer) new ClassPathXmlApplicationContext("global-order-producer.xml").getBean("globalOrderProducer");
 
-        // 创建message, 全局顺序消息不支持tag及延迟投递属性设置
+        // 创建message, 全局顺序消息不支持延迟投递属性设置
         Message message = new Message();
         message.setTopic(TOPIC);
         message.setBody(("this is message boy").getBytes());
         Message message1 = new Message();
         message1.setTopic(TOPIC);
         message1.setBody(("this is message1 boy").getBytes());
+
+        // 设置message tag属性, 如有需要
+        message.getProperties().put(MessageConstants.PROPERTY_TAGS, "TAG1");
 
         // 同步发送单条消息
         SendResult sendResult = globalOrderProducer.sendMessage(message);
